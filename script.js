@@ -232,7 +232,7 @@ font-family: 'Georgia', serif;
         {
             id: 'zvezda',
             name: 'Звезда',
-            description: 'Удесятеряет монеты за клик на 3 секунды.',
+            description: 'Удесятеряет монеты за клик на 7 секунд.',
             baseCost: 10000,
             costMultiplier: 4,
             count: 0,
@@ -321,7 +321,7 @@ font-family: 'Georgia', serif;
                     setTimeout(function () {
                         gameState.clickValue = originalClickValue;
                         saveState();
-                    }, 3000);
+                    }, 7000);
                 }
                 updateDisplay();
                 updateUpgradesDisplay();
