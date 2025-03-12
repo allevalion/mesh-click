@@ -1038,7 +1038,6 @@ user-select: none;
     // Функция для создания отзывчивой верстки
     function updateResponsiveLayout() {
         var newSize = Math.min(300, window.innerWidth * 0.8);
-        document.body.style.overflowY = "visible";
         if (coinContainer) {
             coinContainer.style.width = newSize + "px";
             coinContainer.style.height = newSize + "px";
@@ -1054,10 +1053,11 @@ user-select: none;
         }
 
         if (window.innerWidth < 600) {
+            document.body.style.cssText = "over";
             if (coinButton) coinButton.style.top = "-15%";
             var coinCount = document.getElementById("coin-count");
             if (coinCount) coinCount.style.marginBottom = "100px";
-            document.body.style.overflowY = "visible";
+            document.body.style.cssText = "overflow-y: visible;";
 
             var achievementsPanel = document.getElementById("achievements-panel");
             if (achievementsPanel) achievementsPanel.style.maxWidth = "250px";
