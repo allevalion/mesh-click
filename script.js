@@ -2,7 +2,7 @@
     // Если игра уже запущена, повторный запуск не выполняется
     if (document.getElementById('mesh-click-game')) return;
 
-    document.body.style.cssText = "overflow-y: hidden;"
+    document.body.style.cssText = "overflow-y: hidden;";
     // Стили
     var styleElem = document.createElement('style');
     styleElem.innerHTML = `
@@ -187,7 +187,6 @@ font-family: 'Georgia', serif;
     coinContainer.appendChild(coinButton);
     gameOverlay.appendChild(coinContainer);
 
-
     // Функция регистрации достижения (проверка по id)
     function registerAchievement(achievement) {
         if (!gameState.achievements.some(function (a) { return a.id === achievement.id; })) {
@@ -263,7 +262,6 @@ font-family: 'Georgia', serif;
         });
         card.appendChild(img);
 
-
         // Настройка имени для улучшения
         var name = document.createElement('h4');
         name.textContent = upgrade.name;
@@ -276,7 +274,6 @@ font-family: 'Georgia', serif;
         Object.assign(desc.style, { margin: '5px 0', fontSize: '1.5em' });
         card.appendChild(desc);
 
-
         // Отображение стоимости улучшений
         var costDisplay = document.createElement('div');
         costDisplay.className = 'upgrade-cost';
@@ -284,7 +281,6 @@ font-family: 'Georgia', serif;
         costDisplay.textContent = 'Стоимость: ' + cost;
         costDisplay.style.margin = '10px 0';
         card.appendChild(costDisplay);
-
 
         // Кнопка покупки улучшений
         var buyButton = document.createElement('button');
@@ -406,14 +402,15 @@ font-family: 'Georgia', serif;
     document.body.appendChild(achievementsToggleButton);
 
     achievementsToggleButton.addEventListener('click', function () {
-        if (achievementsPanel.classList.contains('open')) {
-            achievementsPanel.classList.remove('open');
-            achievementsToggleButton.innerHTML = 'Показать достижения';
-        } else {
-            achievementsPanel.classList.add('open');
-            achievementsToggleButton.innerHTML = 'Скрыть достижения';
+        achievementsPanel.classList.toggle('open');
+
+        if (window.innerWidth > 600) {
+            achievementsToggleButton.innerHTML = achievementsPanel.classList.contains('open')
+                ? 'Скрыть достижения'
+                : 'Показать достижения';
         }
     });
+
 
     // Кнопка "Связь с создателем"
     var contactButton = document.createElement('button');
@@ -540,28 +537,8 @@ user-select: none;
         closeBtn.addEventListener('click', function () {
             document.body.removeChild(overlay);
         });
-        var fullScreenBtn = document.createElement('button');
-        fullScreenBtn.textContent = 'На весь экран';
-        fullScreenBtn.style.cssText = `
-margin-top: 10px;
-margin-left: 10px;
-padding: 10px 15px;
-font-size: 1.1em;
-background: #0066cc;
-color: #fff;
-border: none;
-border-radius: 5px;
-cursor: pointer;
-user-select: none;
-`;
 
-        fullScreenBtn.addEventListener('click', function () {
-            if (overlay.requestFullscreen) {
-                overlay.requestFullscreen();
-            }
-        });
         modal.appendChild(closeBtn);
-        modal.appendChild(fullScreenBtn);
         overlay.appendChild(modal);
         document.body.appendChild(overlay);
     }
@@ -657,7 +634,6 @@ user-select: none;
         }
     }
 
-
     function saveState() {
         gameState.upgrades = upgrades.map(upg => ({ id: upg.id, count: upg.count }));
         localStorage.setItem('meshClickGameState', JSON.stringify(gameState));
@@ -699,7 +675,6 @@ user-select: none;
         }, 2200);
     }
 
-
     // Обновление панели достижений
     function updateAchievementsPanel() {
         achievementsPanel.innerHTML = '<h3 style="margin:0 0 10px 0; text-align:center;">Достижения</h3>';
@@ -717,7 +692,6 @@ user-select: none;
         });
     }
     updateAchievementsPanel();
-
 
     // Функция обновления отображения (монеты, уровень, стили и прочее)
     function updateDisplay() {
@@ -1057,4 +1031,148 @@ user-select: none;
             secretCombo.state = 0;
         }
     });
+
+
+    // ОТЗЫВЧИВАЯ ВЕРСТКА
+
+    // Функция для создания отзывчивой верстки
+    function updateResponsiveLayout() {
+        var newSize = Math.min(300, window.innerWidth * 0.8);
+        document.body.style.overflowY = "visible";
+        if (coinContainer) {
+            coinContainer.style.width = newSize + "px";
+            coinContainer.style.height = newSize + "px";
+        }
+        if (coinButton) {
+            coinButton.style.width = newSize + "px";
+            coinButton.style.height = newSize + "px";
+        }
+        if (svgElem) {
+            svgElem.setAttribute('width', newSize);
+            svgElem.setAttribute('height', newSize);
+            svgElem.setAttribute('viewBox', '0 0 ' + newSize + ' ' + newSize);
+        }
+
+        if (window.innerWidth < 600) {
+            if (coinButton) coinButton.style.top = "-15%";
+            var coinCount = document.getElementById("coin-count");
+            if (coinCount) coinCount.style.marginBottom = "100px";
+            document.body.style.overflowY = "visible";
+
+            var achievementsPanel = document.getElementById("achievements-panel");
+            if (achievementsPanel) achievementsPanel.style.maxWidth = "250px";
+
+            if (resetButton) {
+                resetButton.style.fontSize = "15px";
+                resetButton.style.padding = "8px 10px";
+                resetButton.textContent = "Ресет";
+            }
+            if (achievementsToggleButton) {
+                achievementsToggleButton.style.left = "310px";
+                achievementsToggleButton.style.fontSize = "15px";
+                achievementsToggleButton.style.top = "50px";
+                achievementsToggleButton.textContent = "Достижения";
+            }
+            if (contactButton) {
+                contactButton.style.fontSize = "15px";
+                contactButton.style.bottom = "50px";
+                contactButton.textContent = "Телеграм";
+            }
+            if (shareButton) {
+                shareButton.style.fontSize = "15px";
+                shareButton.textContent = "Сертификат";
+            }
+
+            if (upgradesContainer) {
+                upgradesContainer.style.display = "flex";
+                upgradesContainer.style.flexDirection = "column";
+                upgradesContainer.style.justifyContent = "center";
+                upgradesContainer.style.alignItems = "center";
+                upgradesContainer.style.overflowX = "visible";
+                upgradesContainer.style.marginBottom = "20px";
+            }
+
+            var upgradeCards = document.querySelectorAll('.upgrade-card');
+            upgradeCards.forEach(function (card) {
+                card.style.width = "70%";
+                card.style.marginBottom = "20px";
+
+                var btn = card.querySelector('button');
+                if (btn) {
+                    btn.style.fontSize = "25px";
+                    btn.style.padding = "8px 10px";
+                }
+                var title = card.querySelector('h4');
+                if (title) title.style.fontSize = "22px";
+                var desc = card.querySelector('p');
+                if (desc) desc.style.fontSize = "20px";
+            });
+
+        } else {
+            if (coinButton) coinButton.style.top = "-30%";
+            if (resetButton) {
+                resetButton.style.fontSize = "1.2em";
+                resetButton.style.padding = "10px 15px";
+                resetButton.textContent = "Сброс прогресса";
+            }
+            if (achievementsToggleButton) {
+                achievementsToggleButton.style.left = "400px";
+                achievementsToggleButton.style.fontSize = "1.5em";
+                achievementsToggleButton.textContent = "Показать достижения";
+            }
+            if (contactButton) {
+                contactButton.style.fontSize = "1.5em";
+                contactButton.style.bottom = "70px";
+                contactButton.textContent = "Связь с создателем";
+            }
+            if (shareButton) {
+                shareButton.style.fontSize = "1.1em";
+                shareButton.textContent = "Поделиться достижениями";
+            }
+
+            if (upgradesContainer) {
+                upgradesContainer.style.cssText = `
+display: flex; 
+justify-content: center; 
+align-items: center; 
+margin-top: 30px; 
+gap: 20px; 
+flex-wrap: wrap;
+`;
+            }
+
+            var upgradeCards = document.querySelectorAll('.upgrade-card');
+            upgradeCards.forEach(function (card) {
+                card.style.width = "200px";
+                card.style.marginBottom = "0";
+                var btn = card.querySelector('button');
+                if (btn) {
+                    btn.style.fontSize = "1.5em";
+                    btn.style.padding = "10px 15px";
+                }
+                var title = card.querySelector('h4');
+                if (title) title.style.fontSize = "18px";
+                var desc = card.querySelector('p');
+                if (desc) desc.style.fontSize = "1.5em";
+            });
+        }
+    }
+
+    // Ждем загрузки страницы перед вызовом
+    document.addEventListener("DOMContentLoaded", function () {
+        updateResponsiveLayout();
+        window.addEventListener("resize", updateResponsiveLayout);
+    });
+
+
+    // Обработчик для прокрутки монетки с помощью касаний для мобильных устройств
+    coinButton.addEventListener('touchmove', function (e) {
+        e.preventDefault();
+        var touch = e.touches[0];
+        var rect = coinButton.getBoundingClientRect();
+        var centerX = rect.left + rect.width / 2;
+        var centerY = rect.top + rect.height / 2;
+        coinRotation = Math.atan2(touch.clientY - centerY, touch.clientX - centerX) * (180 / Math.PI);
+        updateCoinTransform();
+    }, { passive: false });
 })();
